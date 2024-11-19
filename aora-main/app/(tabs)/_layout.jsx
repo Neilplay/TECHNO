@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     height: 24,
   },
   iconLabel: {
-    fontSize: 12,
+    fontSize: 10,
   },
   iconLabelDefault: {
     fontFamily: "System",

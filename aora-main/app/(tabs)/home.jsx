@@ -1,88 +1,141 @@
-import { useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { FlatList, Image, RefreshControl, Text, View } from "react-native";
+import React from "react";
+import { SafeAreaView, View, Text, StyleSheet, FlatList } from "react-native";
+import { MaterialIcons, Ionicons, FontAwesome5 } from "@expo/vector-icons";
 
-import { images } from "../../constants";
-import useAppwrite from "../../lib/useAppwrite";
-import { getAllPosts, getLatestPosts } from "../../lib/appwrite";
-import { EmptyState, SearchInput, Trending, VideoCard } from "../../components";
+const DashboardCard = ({ title, value, change, isUp, icon }) => (
+  <View style={styles.card}>
+    <View style={styles.iconContainer}>{icon}</View>
+    <View style={styles.cardContent}>
+      <Text style={styles.cardTitle}>{title}</Text>
+      <Text style={styles.cardValue}>{value}</Text>
+      <Text style={[styles.cardChange, isUp ? styles.up : styles.down]}>
+        {isUp ? "▲" : "▼"} {change}
+      </Text>
+    </View>
+  </View>
+);
 
 const Home = () => {
-  const { data: posts, refetch } = useAppwrite(getAllPosts);
-  const { data: latestPosts } = useAppwrite(getLatestPosts);
-
-  const [refreshing, setRefreshing] = useState(false);
-
-  const onRefresh = async () => {
-    setRefreshing(true);
-    await refetch();
-    setRefreshing(false);
-  };
-
-  // one flatlist
-  // with list header
-  // and horizontal flatlist
-
-  //  we cannot do that with just scrollview as there's both horizontal and vertical scroll (two flat lists, within trending)
+  const data = [
+    {
+      id: "1",
+      title: "Total Active Vendors",
+      value: "5",
+      change: "1% Up from yesterday",
+      isUp: true,
+      icon: <Ionicons name="person-circle" size={32} color="#fff" />,
+    },
+    {
+      id: "2",
+      title: "Total Orders",
+      value: "21",
+      change: "1.3% Up from past week",
+      isUp: true,
+      icon: <MaterialIcons name="inventory" size={32} color="#fff" />,
+    },
+    {
+      id: "3",
+      title: "Total Sales",
+      value: "₱2,100",
+      change: "1% Down from yesterday",
+      isUp: false,
+      icon: <FontAwesome5 name="chart-line" size={32} color="#fff" />,
+    },
+    {
+      id: "4",
+      title: "Total Pending",
+      value: "3",
+      change: "1% Up from yesterday",
+      isUp: true,
+      icon: <Ionicons name="time" size={32} color="#fff" />,
+    },
+  ];
 
   return (
-    <SafeAreaView className="bg-primary">
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.header}>Dashboard</Text>
       <FlatList
-        data={posts}
-        keyExtractor={(item) => item.$id}
+        data={data}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <VideoCard
+          <DashboardCard
             title={item.title}
-            thumbnail={item.thumbnail}
-            video={item.video}
-            creator={item.creator.username}
-            avatar={item.creator.avatar}
+            value={item.value}
+            change={item.change}
+            isUp={item.isUp}
+            icon={item.icon}
           />
         )}
-        ListHeaderComponent={() => (
-          <View className="flex my-6 px-4 space-y-6">
-            <View className="flex justify-between items-start flex-row mb-6">
-              <View>
-                <Text className="font-pmedium text-sm text-gray-100">
-                  Welcome Back
-                </Text>
-                <Text className="text-2xl font-psemibold text-white">
-                  JSMastery
-                </Text>
-              </View>
-
-              <View className="mt-1.5">
-                <Image
-                  source={images.logoSmall}
-                  className="w-9 h-10"
-                  resizeMode="contain"
-                />
-              </View>
-            </View>
-
-            <SearchInput />
-
-            <View className="w-full flex-1 pt-5 pb-8">
-              <Text className="text-lg font-pregular text-gray-100 mb-3">
-                Latest Videos
-              </Text>
-
-              <Trending posts={latestPosts ?? []} />
-            </View>
-          </View>
-        )}
-        ListEmptyComponent={() => (
-          <EmptyState
-            title="No Videos Found"
-            subtitle="No videos created yet"
-          />
-        )}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
       />
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#1f1f1f",
+    padding: 16,
+  },
+  header: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#fff",
+    marginBottom: 16,
+    marginTop:30,
+  },
+  card: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#2a2a2a",
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 16,
+  },
+  iconContainer: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: "#3d3d3d",
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 16,
+  },
+  cardContent: {
+    flex: 1,
+  },
+  cardTitle: {
+    fontSize: 14,
+    color: "#fff",
+    marginBottom: 4,
+  },
+  cardValue: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#fff",
+  },
+  cardChange: {
+    fontSize: 12,
+  },
+  up: {
+    color: "#4caf50",
+  },
+  down: {
+    color: "#f44336",
+  },
+  chartContainer: {
+    marginTop: 16,
+  },
+  chartTitle: {
+    fontSize: 16,
+    color: "#fff",
+    marginBottom: 8,
+  },
+  chart: {
+    height: 150,
+    backgroundColor: "#2a2a2a",
+    borderRadius: 8,
+  },
+});
 
 export default Home;
