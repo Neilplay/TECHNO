@@ -1,0 +1,141 @@
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+
+export default function SubscriptionPlan() {
+  const [selectedPlan, setSelectedPlan] = useState('Starter');
+
+  const plans = [
+    { name: 'Starter', price: '₱250.00 / mo', description: 'up to 4 users' },
+    { name: 'Premium', price: '₱500.00 / mo', description: 'up to 10 users' },
+    { name: 'Free', price: '', description: 'up to 2 users only' },
+  ];
+
+  return (
+    <View style={styles.container}>
+      <TouchableOpacity style={styles.backButton}>
+        <Text style={styles.backText}>{'<'}</Text>
+      </TouchableOpacity>
+      <View style={styles.header}>
+        <Text style={styles.title}>Choose your plan</Text>
+        <Text style={styles.subtitle}>
+          To complete the sign-up process, please choose a subscription plan.
+        </Text>
+      </View>
+      <View style={styles.planContainer}>
+        {plans.map((plan) => (
+          <TouchableOpacity
+            key={plan.name}
+            style={[
+              styles.planCard,
+              selectedPlan === plan.name && styles.planCardSelected,
+            ]}
+            onPress={() => setSelectedPlan(plan.name)}
+          >
+            <View style={styles.planDetails}>
+              <Text style={styles.planName}>
+                {plan.name} ({plan.description})
+              </Text>
+              {plan.price ? (
+                <Text style={styles.planPrice}>{plan.price}</Text>
+              ) : null}
+            </View>
+            <View style={styles.radio}>
+              {selectedPlan === plan.name && <View style={styles.radioSelected} />}
+            </View>
+          </TouchableOpacity>
+        ))}
+      </View>
+      <TouchableOpacity style={styles.continueButton}>
+        <Text style={styles.continueText}>Continue</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#fff',
+  },
+  backButton: {
+    width: 30,
+    height: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 15,
+    backgroundColor: '#F0F0F0',
+  },
+  backText: {
+    fontSize: 16,
+  },
+  header: {
+    marginVertical: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#000',
+  },
+  subtitle: {
+    fontSize: 14,
+    color: '#555',
+    marginTop: 5,
+  },
+  planContainer: {
+    marginVertical: 20,
+  },
+  planCard: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 15,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    marginBottom: 10,
+  },
+  planCardSelected: {
+    borderColor: '#000',
+  },
+  planDetails: {
+    flex: 1,
+  },
+  planName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#000',
+  },
+  planPrice: {
+    fontSize: 14,
+    color: '#555',
+    marginTop: 5,
+  },
+  radio: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: '#000',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  radioSelected: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: '#000',
+  },
+  continueButton: {
+    marginTop: 20,
+    backgroundColor: '#000',
+    padding: 15,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  continueText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+});
