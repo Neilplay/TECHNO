@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { Redirect, Tabs } from "expo-router";
-import { Image, Text, View } from "react-native";
+import { Image, Text, View, StyleSheet } from "react-native";
 
 import { icons } from "../../constants";
 import { Loader } from "../../components";
@@ -8,16 +8,18 @@ import { useGlobalContext } from "../../context/GlobalProvider";
 
 const TabIcon = ({ icon, color, name, focused }) => {
   return (
-    <View className="flex items-center justify-center gap-2">
+    <View style={styles.tabIconContainer}>
       <Image
         source={icon}
         resizeMode="contain"
-        tintColor={color}
-        className="w-6 h-6"
+        style={[styles.icon, { tintColor: color }]}
       />
       <Text
-        className={`${focused ? "font-psemibold" : "font-pregular"} text-xs`}
-        style={{ color: color }}
+        style={[
+          styles.iconLabel,
+          focused ? styles.iconLabelFocused : styles.iconLabelDefault,
+          { color },
+        ]}
       >
         {name}
       </Text>
@@ -37,12 +39,7 @@ const TabLayout = () => {
           tabBarActiveTintColor: "#FFA001",
           tabBarInactiveTintColor: "#CDCDE0",
           tabBarShowLabel: false,
-          tabBarStyle: {
-            backgroundColor: "#161622",
-            borderTopWidth: 1,
-            borderTopColor: "#232533",
-            height: 84,
-          },
+          tabBarStyle: styles.tabBar,
         }}
       >
         <Tabs.Screen
@@ -112,5 +109,35 @@ const TabLayout = () => {
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  tabBar: {
+    backgroundColor: "#161622",
+    borderTopWidth: 1,
+    borderTopColor: "#232533",
+    height: 70,
+    paddingBottom: 10, // Extra padding for text clarity
+  },
+  tabIconContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 5, // Adds consistent spacing between the icon and text
+  },
+  icon: {
+    width: 24,
+    height: 24,
+  },
+  iconLabel: {
+    fontSize: 12,
+  },
+  iconLabelDefault: {
+    fontFamily: "System",
+    fontWeight: "400", // Default font weight for inactive tabs
+  },
+  iconLabelFocused: {
+    fontFamily: "System",
+    fontWeight: "600", // Emphasized font weight for active tabs
+  },
+});
 
 export default TabLayout;
