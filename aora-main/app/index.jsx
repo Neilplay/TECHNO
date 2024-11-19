@@ -23,7 +23,7 @@ const Welcome = () => {
       >
         <View className="w-full flex justify-center items-center h-full px-4">
           <Image
-            source={images.logo}
+            source={images.tori_logo}
             className="w-[130px] h-[84px]"
             resizeMode="contain"
           />
@@ -38,19 +38,19 @@ const Welcome = () => {
             <Text className="text-3xl text-white font-bold text-center">
               Discover Endless{"\n"}
               Possibilities with{" "}
-              <Text className="text-secondary-200">Aora</Text>
+              <Text className="text-secondary-200">Tori</Text>
             </Text>
 
             <Image
               source={images.path}
-              className="w-[136px] h-[15px] absolute -bottom-2 -right-8"
+              className="w-[136px] h-[15px] absolute -bottom-2 -right-10"
               resizeMode="contain"
             />
           </View>
 
           <Text className="text-sm font-pregular text-gray-100 mt-7 text-center">
-            Where Creativity Meets Innovation: Embark on a Journey of Limitless
-            Exploration with Aora
+            A sales-inventory system with role-based access for
+            multiple sellers in a single booth.
           </Text>
 
           <CustomButton

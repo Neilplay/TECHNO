@@ -48,9 +48,9 @@ const SignIn = () => {
           }}
         >
           <Image
-            source={images.logo}
+            source={images.tori_logo}
             resizeMode="contain"
-            className="w-[115px] h-[34px]"
+            className="w-[150px] h-[80px]"
           />
 
           <Text className="text-2xl font-semibold text-white mt-10 font-psemibold">
@@ -77,6 +77,7 @@ const SignIn = () => {
             handlePress={submit}
             containerStyles="mt-7"
             isLoading={isSubmitting}
+
           />
 
           <View className="flex justify-center pt-5 flex-row gap-2">
