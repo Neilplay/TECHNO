@@ -36,8 +36,8 @@ const Profile = () => {
         )}
         ListEmptyComponent={() => (
           <EmptyState
-            title="No Videos Found"
-            subtitle="No videos found for this profile"
+            title="No Items Found in the Profile"
+            subtitle="No Items yet"
           />
         )}
         ListHeaderComponent={() => (
@@ -69,14 +69,14 @@ const Profile = () => {
 
             <View className="mt-5 flex flex-row">
               <InfoBox
-                title={posts.length || 0}
-                subtitle="Posts"
+                title={posts.length || 3}
+                subtitle="Users"
                 titleStyles="text-xl"
                 containerStyles="mr-10"
               />
               <InfoBox
-                title="1.2k"
-                subtitle="Followers"
+                title="10"
+                subtitle="Items"
                 titleStyles="text-xl"
               />
             </View>
