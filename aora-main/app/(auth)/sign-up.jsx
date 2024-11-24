@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text, ScrollView, Dimensions, Alert, Image } from "react-native";
-
 import { supabase } from "../../supabase"; // Import Supabase client
 import { images } from "../../constants";
 import { CustomButton, FormField } from "../../components";
@@ -13,6 +12,7 @@ const SignUp = () => {
     username: "",
     email: "",
     password: "",
+    role: "seller", // Default role is "seller"
   });
 
   const submit = async () => {
@@ -31,9 +31,13 @@ const SignUp = () => {
 
       if (error) throw error;
 
-      // Add user details to `users` table (optional)
+      // Insert user details along with the role into the 'users' table
       const { error: dbError } = await supabase.from("users").insert([
-        { username: form.username, email: form.email },
+        {
+          username: form.username,
+          email: form.email,
+          role: form.role, // Store the role for the user
+        },
       ]);
 
       if (dbError) throw dbError;
@@ -85,6 +89,14 @@ const SignUp = () => {
             title="Password"
             value={form.password}
             handleChangeText={(e) => setForm({ ...form, password: e })}
+            otherStyles="mt-7"
+          />
+
+          {/* Add Role Selection */}
+          <FormField
+            title="Role"
+            value={form.role}
+            handleChangeText={(e) => setForm({ ...form, role: e })}
             otherStyles="mt-7"
           />
 

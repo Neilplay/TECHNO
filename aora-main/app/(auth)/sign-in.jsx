@@ -25,19 +25,36 @@ const SignIn = () => {
 
     try {
       // Sign in user with Supabase Auth
-      const { data: user, error } = await supabase.auth.signInWithPassword({
+      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
         email: form.email,
         password: form.password,
       });
 
-      if (error) throw error;
+      if (authError) throw authError;
 
-      // Successfully logged in, update global context
+      // Fetch the user's role from the 'users' table
+      const { data: userData, error: roleError } = await supabase
+        .from("users")
+        .select("id, username, email, role")
+        .eq("email", form.email)
+        .single();
+
+      if (roleError) throw roleError;
+
+      // Update global context with user info and role
       setIsLogged(true);
-      setUser(user); // Set the logged-in user in the context
+      setUser(userData); // Store the user's details and role in the context
 
-      Alert.alert("Success", "Signed in successfully");
-      router.replace("/home"); // Redirect to home page
+      Alert.alert("Success", `Welcome back, ${userData.role}!`);
+
+      // Navigate based on role
+      if (userData.role === "admin") {
+        router.replace("/admin-dashboard"); // Redirect to admin dashboard
+      } else if (userData.role === "seller") {
+        router.replace("/seller-dashboard"); // Redirect to seller dashboard
+      } else {
+        throw new Error("Invalid role assigned to this user.");
+      }
     } catch (error) {
       Alert.alert("Error", error.message);
     } finally {

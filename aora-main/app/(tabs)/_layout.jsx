@@ -58,7 +58,22 @@ const TabLayout = () => {
           }}
         />
         <Tabs.Screen
-          name="inventory_user"
+          name="inventory"
+          options={{
+            title: "Inventory",
+            headerShown: false,
+            tabBarIcon: ({ color, focused }) => (
+              <TabIcon
+                icon={icons.bookmark}
+                color={color}
+                name="Inventory"
+                focused={focused}
+              />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="inventory_admin"
           options={{
             title: "Inventory",
             headerShown: false,
