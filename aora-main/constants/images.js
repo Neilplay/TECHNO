@@ -7,5 +7,7 @@ import logoSmall from "../assets/images/logo-small.png";
 import empty from "../assets/images/empty.png";
 import tori_logo from "../assets/images/tori_logo.png";
 import tori_logo2 from "../assets/images/tori_logo2.png";
+import tori_logo3 from "../assets/images/tori_logo2.png";
+import tori_logo4 from "../assets/images/tori_logo2.png";
 
-export default { profile, thumbnail, cards, path, logo, logoSmall, empty, tori_logo, tori_logo2 };
+export default { profile, thumbnail, cards, path, logo, logoSmall, empty, tori_logo, tori_logo2, tori_logo3, tori_logo4 };

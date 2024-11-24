@@ -62,7 +62,7 @@ const SignUp = () => {
           }}
         >
           <Image
-            source={images.tori_logo}
+            source={images.tori_logo4}
             resizeMode="contain"
             className="w-[150px] h-[80px]"
           />
