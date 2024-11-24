@@ -58,7 +58,7 @@ const TabLayout = () => {
           }}
         />
         <Tabs.Screen
-          name="inventory"
+          name="inventory_user"
           options={{
             title: "Inventory",
             headerShown: false,
