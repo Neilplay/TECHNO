@@ -49,9 +49,9 @@ const SignIn = () => {
 
       // Navigate based on role
       if (userData.role === "admin") {
-        router.replace("/home"); // Redirect to admin dashboard
+        router.replace("/admin_nav/admin_home"); // Redirect to admin dashboard
       } else if (userData.role === "seller") {
-        router.replace("/home"); // Redirect to seller dashboard
+        router.replace("/user_nav/user_home"); // Redirect to seller dashboard
       } else {
         throw new Error("Invalid role assigned to this user.");
       }

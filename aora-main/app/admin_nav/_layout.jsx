@@ -5,6 +5,8 @@ import { Image, Text, View, StyleSheet } from "react-native";
 import { icons } from "../../constants";
 import { Loader } from "../../components";
 import { useGlobalContext } from "../../context/GlobalProvider";
+import { useEffect, useState } from "react";
+import { supabase } from "../../supabase"; // Make sure this is your Supabase client import
 
 const TabIcon = ({ icon, color, name, focused }) => {
   return (
@@ -28,7 +30,32 @@ const TabIcon = ({ icon, color, name, focused }) => {
 };
 
 const TabLayout = () => {
-  const { loading, isLogged } = useGlobalContext();
+  const { loading, isLogged, user } = useGlobalContext();
+  const [role, setRole] = useState(null);
+
+  useEffect(() => {
+    if (!loading && isLogged) {
+      fetchUserRole();
+    }
+  }, [loading, isLogged]);
+
+  const fetchUserRole = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("users")
+        .select("role")
+        .eq("id", user?.id)
+        .single();
+
+      if (error) {
+        console.error("Error fetching user role:", error);
+      } else {
+        setRole(data.role);
+      }
+    } catch (err) {
+      console.error("Unexpected error:", err);
+    }
+  };
 
   if (!loading && !isLogged) return <Redirect href="/sign-in" />;
 
@@ -57,36 +84,24 @@ const TabLayout = () => {
             ),
           }}
         />
-        <Tabs.Screen
-          name="inventory"
-          options={{
-            title: "Inventory",
-            headerShown: false,
-            tabBarIcon: ({ color, focused }) => (
-              <TabIcon
-                icon={icons.bookmark}
-                color={color}
-                name="Inventory"
-                focused={focused}
-              />
-            ),
-          }}
-        />
-        <Tabs.Screen
-          name="inventory_admin"
-          options={{
-            title: "Inventory",
-            headerShown: false,
-            tabBarIcon: ({ color, focused }) => (
-              <TabIcon
-                icon={icons.bookmark}
-                color={color}
-                name="Inventory"
-                focused={focused}
-              />
-            ),
-          }}
-        />
+        {role === "admin" && (
+          <Tabs.Screen
+            key="inventory_admin"
+            name="inventory_admin"
+            options={{
+              title: "Inventory",
+              headerShown: false,
+              tabBarIcon: ({ color, focused }) => (
+                <TabIcon
+                  icon={icons.bookmark}
+                  color={color}
+                  name="Inventory"
+                  focused={focused}
+                />
+              ),
+            }}
+          />
+        )}
         <Tabs.Screen
           name="create"
           options={{
@@ -119,11 +134,12 @@ const TabLayout = () => {
         />
       </Tabs>
 
-      <Loader isLoading={loading} />
+      <Loader isLoading={loading || role === null} />
       <StatusBar backgroundColor="#161622" style="light" />
     </>
   );
 };
+
 
 const styles = StyleSheet.create({
   tabBar: {
@@ -131,12 +147,12 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: "#232533",
     height: 70,
-    paddingBottom: 10, // Extra padding for text clarity
+    paddingBottom: 10,
   },
   tabIconContainer: {
     alignItems: "center",
     justifyContent: "center",
-    gap: 5, // Adds consistent spacing between the icon and text
+    gap: 5,
   },
   icon: {
     width: 24,
@@ -147,11 +163,11 @@ const styles = StyleSheet.create({
   },
   iconLabelDefault: {
     fontFamily: "System",
-    fontWeight: "400", // Default font weight for inactive tabs
+    fontWeight: "400",
   },
   iconLabelFocused: {
     fontFamily: "System",
-    fontWeight: "600", // Emphasized font weight for active tabs
+    fontWeight: "600",
   },
 });
 

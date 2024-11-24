@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import Tab1 from './user1';
-import Tab2 from './user2';
-import Tab3 from './user3';
+import Tab1 from './admin1';
+import Tab2 from './admin2';
+import Tab3 from './admin3';
 
 const TabsContainer = ({ activeTab, setActiveTab }) => {
   const renderTabContent = () => {
