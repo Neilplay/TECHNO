@@ -2,35 +2,42 @@ import { useState } from "react";
 import { Link, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text, ScrollView, Dimensions, Alert, Image } from "react-native";
-
+import { supabase } from "../../supabase"; // Import Supabase client
 import { images } from "../../constants";
 import { CustomButton, FormField } from "../../components";
-import { getCurrentUser, signIn } from "../../lib/appwrite";
-import { useGlobalContext } from "../../context/GlobalProvider";
+import { useGlobalContext } from "../../context/GlobalProvider"; // Import global context
 
 const SignIn = () => {
-  const { setUser, setIsLogged } = useGlobalContext();
   const [isSubmitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
+  const { setIsLogged, setUser } = useGlobalContext(); // Access setIsLogged and setUser
 
   const submit = async () => {
     if (form.email === "" || form.password === "") {
       Alert.alert("Error", "Please fill in all fields");
+      return;
     }
 
     setSubmitting(true);
 
     try {
-      await signIn(form.email, form.password);
-      const result = await getCurrentUser();
-      setUser(result);
-      setIsLogged(true);
+      // Sign in user with Supabase Auth
+      const { data: user, error } = await supabase.auth.signInWithPassword({
+        email: form.email,
+        password: form.password,
+      });
 
-      Alert.alert("Success", "User signed in successfully");
-      router.replace("/home");
+      if (error) throw error;
+
+      // Successfully logged in, update global context
+      setIsLogged(true);
+      setUser(user); // Set the logged-in user in the context
+
+      Alert.alert("Success", "Signed in successfully");
+      router.replace("/home"); // Redirect to home page
     } catch (error) {
       Alert.alert("Error", error.message);
     } finally {
@@ -77,17 +84,13 @@ const SignIn = () => {
             handlePress={submit}
             containerStyles="mt-7"
             isLoading={isSubmitting}
-
           />
 
           <View className="flex justify-center pt-5 flex-row gap-2">
             <Text className="text-lg text-gray-100 font-pregular">
               Don't have an account?
             </Text>
-            <Link
-              href="/sign-up"
-              className="text-lg font-psemibold text-secondary"
-            >
+            <Link href="/sign-up" className="text-lg font-psemibold text-secondary">
               Signup
             </Link>
           </View>

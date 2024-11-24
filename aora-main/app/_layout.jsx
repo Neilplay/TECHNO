@@ -38,7 +38,7 @@ const RootLayout = () => {
   }
 
   return (
-    <GlobalProvider>
+    <GlobalProvider> {/* Wrap the whole app with GlobalProvider */}
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
