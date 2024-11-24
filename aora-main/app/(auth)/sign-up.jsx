@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text, ScrollView, Dimensions, Alert, Image } from "react-native";
+import RNPickerSelect from "react-native-picker-select"; // Import the picker
 import { supabase } from "../../supabase"; // Import Supabase client
 import { images } from "../../constants";
 import { CustomButton, FormField } from "../../components";
@@ -61,7 +62,7 @@ const SignUp = () => {
           }}
         >
           <Image
-            source={images.tori_logo}
+            source={images.tori_logo4}
             resizeMode="contain"
             className="w-[150px] h-[80px]"
           />
@@ -90,15 +91,40 @@ const SignUp = () => {
             value={form.password}
             handleChangeText={(e) => setForm({ ...form, password: e })}
             otherStyles="mt-7"
+            secureTextEntry
           />
 
-          {/* Add Role Selection */}
-          <FormField
-            title="Role"
-            value={form.role}
-            handleChangeText={(e) => setForm({ ...form, role: e })}
-            otherStyles="mt-7"
-          />
+          {/* Dropdown for Role Selection */}
+          <View className="mt-7">
+            <Text className="text-white font-pregular mb-2">Role</Text>
+            <RNPickerSelect
+              onValueChange={(value) => setForm({ ...form, role: value })}
+              items={[
+                { label: "Seller", value: "seller" },
+                { label: "Admin", value: "admin" },
+              ]}
+              value={form.role}
+              placeholder={{}} // Removes "Select an item" text
+              style={{
+                inputAndroid: {
+                  // Tailwind equivalent: "bg-white rounded-md p-3 text-base"
+                  backgroundColor: "#1E1E2D",
+                  borderRadius: 8,
+                  padding: 12,
+                  fontSize: 16,
+                  color: "#FFFFFA",
+                },
+                inputIOS: {
+                  // Tailwind equivalent: "bg-white rounded-md p-3 text-base"
+                  backgroundColor: "#FFF",
+                  borderRadius: 8,
+                  padding: 12,
+                  fontSize: 16,
+                  color: "#000",
+                },
+              }}
+            />
+          </View>
 
           <CustomButton
             title="Sign Up"
